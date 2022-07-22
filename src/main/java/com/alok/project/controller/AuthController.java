@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alok.project.exceptions.LoginPasswordException;
 import com.alok.project.payloads.JwtAuthRequest;
 import com.alok.project.payloads.JwtAuthResponse;
+import com.alok.project.payloads.UserDto;
 import com.alok.project.security.JwtTokenHelper;
+import com.alok.project.services.UserService;
 
 @RestController
 @RequestMapping("/api/auth/")
@@ -29,6 +31,9 @@ public class AuthController {
 	
 	@Autowired
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -58,15 +63,21 @@ public class AuthController {
 		} catch (BadCredentialsException e) {
 			// TODO: handle exception
 			System.out.println("invalid details!!");
-			throw new LoginPasswordException("invalid username or password!!!");
+			throw new LoginPasswordException("invalid password!!!");
 			
 		}
 			
 		
 			//if things go ssouth then  the exception will nbe generated and te excetiuon be generated disbaled e 
-			//taken care in gkobal exceptionj
+			//taken care in gkobal exceptionj	
+	}
+	
+	@PostMapping("/register")
+	public ResponseEntity<UserDto> registerNewUser(@RequestBody UserDto user){
+	
+		UserDto registeredUser = this.userService.registerNewUser(user);
 		
-		
+		return new ResponseEntity<UserDto>(registeredUser, HttpStatus.CREATED);
 	}
 	
 }

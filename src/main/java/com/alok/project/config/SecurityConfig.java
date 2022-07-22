@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.alok.project.security.CustomUserDetailService;
 import com.alok.project.security.JwtAuthenticationEntryPoint;
@@ -31,8 +32,17 @@ import com.alok.project.security.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableWebMvc
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
+	
+	//saare urls ko ek saath public walo ko saath mei hi rakh lo
+	
+	public static final String[] PUBLIC_URLS = {
+			"/api/auth/**", "/v3/api-docs/", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**", "/v2/api-docs"
+	};
+	
+	//once youre done with swaggger config you can easily also change what the fronten shows you so we have made the swaggerconfig clkass for that
 	
 	//remember all of this is basic auth  only just that the complete thing is done by the help of user stored in the db
 	//now we will processd wih the jwt authentication
@@ -57,8 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.
 		csrf().disable()
 		.authorizeHttpRequests()
-		.antMatchers("/api/auth/login").permitAll() 
-		.antMatchers(HttpMethod.GET).permitAll()
+		.antMatchers(PUBLIC_URLS).permitAll()   //** for login and register both without difference in roles etc
+		.antMatchers(HttpMethod.GET).permitAll() //for permitting all the et methods
 		.anyRequest()
 		.authenticated()
 		.and()        //for the jwt token thing you need to add sth before the http basics
