@@ -15,6 +15,7 @@ import com.alok.project.exceptions.ResourceNotFoundException;
 import com.alok.project.payloads.CommentByUserResponse;
 import com.alok.project.payloads.CommentDto;
 import com.alok.project.payloads.UserDto;
+import com.alok.project.payloads.UserForCommentsDto;
 import com.alok.project.repositories.CommentRepo;
 import com.alok.project.repositories.PostRepo;
 import com.alok.project.repositories.UserRepo;
@@ -70,7 +71,7 @@ public class CommentServiceImpl implements CommentService {
 		for(Comment c: comments) {
 			User user = c.getUser();
 			CommentDto mappedDto = this.modelMapper.map(c, CommentDto.class);
-			mappedDto.setUser(this.modelMapper.map(user, UserDto.class));
+			mappedDto.setUser(this.modelMapper.map(user, UserForCommentsDto.class));
 			
 			commentDtos.add(mappedDto);
 		}

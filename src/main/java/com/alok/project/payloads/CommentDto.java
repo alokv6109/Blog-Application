@@ -16,6 +16,6 @@ public class CommentDto {
 	
 	private String content;
 	
-	private UserDto user;
+	private UserForCommentsDto user;
 
 }
