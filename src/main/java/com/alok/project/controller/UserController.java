@@ -65,6 +65,15 @@ public class UserController {
 		
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/registerAdmin")
+	public ResponseEntity<UserDto> createAdmin( @Valid @RequestBody UserDto userDto){
+		UserDto createUserDto  = this.userService.registerAdmin(userDto);
+		return new ResponseEntity<>(createUserDto, HttpStatus.CREATED);
+//		return null;
+		
+	}
+	
 	@PutMapping("/{userId}")
 	public ResponseEntity<UserDto> updateUser( @Valid @RequestBody UserDto userDto, @PathVariable Integer userId){
 		UserDto updatedUser = this.userService.updateUser(userDto, userId);

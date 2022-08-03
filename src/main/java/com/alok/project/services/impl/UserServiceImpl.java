@@ -156,4 +156,20 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	@Override
+	public UserDto registerAdmin(UserDto userDto) {
+
+		User user = this.modelMapper.map(userDto, User.class);
+		//encoded the password
+		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+		
+		//role to a person : if by register api then lets give it normal role only
+		Role role = this.roleRepo.findById(AppConstants.ADMIN_USER).get();
+		user.getRoles().add(role);
+		
+		User savedUser = this.userRepo.save(user);
+		
+		return this.modelMapper.map(savedUser, UserDto.class);
+	}
+
 }
