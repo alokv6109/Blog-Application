@@ -1,5 +1,9 @@
 package com.alok.project.controller;
 
+import java.util.Date;
+
+import javax.validation.Valid;
+
 //import javax.validation.constraints.Positive;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +14,16 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alok.project.exceptions.LoginPasswordException;
+import com.alok.project.payloads.ChangePasswordRequest;
+//import com.alok.project.payloads.ChangePasswordRequst;
 import com.alok.project.payloads.JwtAuthRequest;
 import com.alok.project.payloads.JwtAuthResponse;
 import com.alok.project.payloads.UserDto;
@@ -78,6 +86,15 @@ public class AuthController {
 		UserDto registeredUser = this.userService.registerNewUser(user);
 		
 		return new ResponseEntity<UserDto>(registeredUser, HttpStatus.CREATED);
+	}
+	
+	@PostMapping("/changePass")
+	public ResponseEntity<UserDto> changePassword(@Valid @RequestBody ChangePasswordRequest cpr, @Valid @RequestParam String email){
+		UserDto registeredUser  = this.userService.createNewPassword(email, cpr.getPassword());
+		Date d  =  new Date();
+		cpr.setDate(d);
+		System.out.println("the date when the password is changes is : " + cpr.getDate());
+		return new ResponseEntity<UserDto>(registeredUser, HttpStatus.OK);
 	}
 	
 }

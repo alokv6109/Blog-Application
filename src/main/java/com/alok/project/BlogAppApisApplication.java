@@ -35,23 +35,23 @@ public class BlogAppApisApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println(this.passwordEncoder.encode("xyz"));
-//		for saving the roles ont time
-		
-		Role role1=  new Role();
-		role1.setId(1);
-		role1.setName("ROLE_ADMIN");
-		
-		this.roleRepo.save(role1);
-		
-		Role role2=  new Role();
-		role2.setId(2);
-		role2.setName("ROLE_USER");
-		
-		this.roleRepo.save(role2);
-		
-		System.out.println("roles saved");
-		
+//		System.out.println(this.passwordEncoder.encode("xyz"));
+////		for saving the roles ont time
+//		
+//		Role role1=  new Role();
+//		role1.setId(1);
+//		role1.setName("ROLE_ADMIN");
+//		
+//		this.roleRepo.save(role1);
+//		
+//		Role role2=  new Role();
+//		role2.setId(2);
+//		role2.setName("ROLE_USER");
+//		
+//		this.roleRepo.save(role2);
+//		
+//		System.out.println("roles saved");
+//		
 		
 		
 	}

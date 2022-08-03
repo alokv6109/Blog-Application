@@ -27,6 +27,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepo userRepo;
 	
+
+	
 	/**
 	 * yha pe jo cheez userdto to user nad uer to userdto k methods banaye gye hai wo librarry ie mapper library ki madata se actually karte hai par yha par aise 
 	 * 
@@ -143,6 +145,15 @@ public class UserServiceImpl implements UserService {
 		User savedUser = this.userRepo.save(user);
 		
 		return this.modelMapper.map(savedUser, UserDto.class);
+	}
+	
+	@Override
+	public  UserDto createNewPassword(String email, String password) {
+		User result = this.userRepo.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("User", "email :" + email , 0));
+		result.setPassword(this.passwordEncoder.encode(password));
+		User savedUser   = this.userRepo.save(result);
+		UserDto user = this.modelMapper.map(savedUser, UserDto.class);
+		return user;
 	}
 
 }
