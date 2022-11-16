@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 import com.alok.project.entities.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ public class UserDto {
 	private String name;
 	
 	@Email(message = "Email address is not valid !!")
+	@NotEmpty
 	private String email;
 	
 	@JsonIgnoreProperties
@@ -48,5 +50,18 @@ public class UserDto {
 //	private Set<RoleDto> roles = new HashSet<RoleDto>();
 	
 //	private List<CommentDto> comments = new ArrayList<CommentDto>();
+	
+	@JsonIgnore
+	public String getPassword() {
+		return this.password;
+	}
+	
+	@JsonProperty
+	public void setPassword(String password) {
+		this.password =password;
+	}
+	
+	
+	
 	
 }

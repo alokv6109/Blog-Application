@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
+
 //import javax.validation.constraints.Positive;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alok.project.entities.User;
 import com.alok.project.exceptions.LoginPasswordException;
 import com.alok.project.payloads.ChangePasswordRequest;
 //import com.alok.project.payloads.ChangePasswordRequst;
@@ -32,6 +35,7 @@ import com.alok.project.services.UserService;
 
 @RestController
 @RequestMapping("/api/auth/")
+
 public class AuthController {
 	
 	@Autowired
@@ -42,6 +46,9 @@ public class AuthController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private ModelMapper mapper;
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -58,7 +65,7 @@ public class AuthController {
 		
 		JwtAuthResponse response = new JwtAuthResponse();
 		response.setToken(token);
-		
+		response.setUser(this.mapper.map((User)userDetails, UserDto.class));
 		return new ResponseEntity<JwtAuthResponse>(response, HttpStatus.OK);
 	}
 
@@ -81,7 +88,7 @@ public class AuthController {
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<UserDto> registerNewUser(@RequestBody UserDto user){
+	public ResponseEntity<UserDto> registerNewUser(@Valid @RequestBody UserDto user){
 	
 		UserDto registeredUser = this.userService.registerNewUser(user);
 		

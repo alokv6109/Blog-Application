@@ -12,6 +12,7 @@ class BlogAppApisApplicationTests {
 	@Autowired
 	private UserRepo userRepo;
 	
+	
 	@Test
 	void contextLoads() {
 	}
@@ -23,6 +24,6 @@ class BlogAppApisApplicationTests {
 		System.out.println(clssName);
 		System.out.println(packName);
 	}
-	
+//	
 
 }

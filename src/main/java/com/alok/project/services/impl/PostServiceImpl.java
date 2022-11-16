@@ -147,12 +147,12 @@ public class PostServiceImpl implements PostService {
 
 	//implkemet pagination over here as well with post by user
 	@Override
-	public UserPostResponse getPostbyUser(Integer pageNumber, Integer pageSize, Integer userId) {
+	public UserPostResponse getPostbyUser(Integer pageNumber, Integer pageSize,String email) {
 		
 		Pageable pagereq = PageRequest.of(pageNumber, pageSize);
+//		Integer userId  = this.userRepo.findIdByEmail(email);
 		
-		
-		User user = this.userRepo.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "user Id", userId));
+		User user = this.userRepo.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("User", "email : " + email, 0));
 		
 		Page<Post> pagePost = this.postRepo.findAllByUser(user, pagereq);
 		List<Post> posts = pagePost.getContent();

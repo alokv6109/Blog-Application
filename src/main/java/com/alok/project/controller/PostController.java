@@ -3,6 +3,7 @@ package com.alok.project.controller;
 import java.awt.PageAttributes.MediaType;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.http.HttpHeaders;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +34,7 @@ import com.alok.project.payloads.ImageResponse;
 import com.alok.project.payloads.PostDto;
 import com.alok.project.payloads.PostResponse;
 import com.alok.project.payloads.UserPostResponse;
+import com.alok.project.security.JwtTokenHelper;
 import com.alok.project.services.FileService;
 import com.alok.project.services.PostService;
 
@@ -41,6 +44,10 @@ public class PostController {
 	
 	@Autowired
 	private PostService postService;
+	
+	@Autowired
+	private JwtTokenHelper jwtTokenHelper;
+	
 	
 	@Autowired
 	private FileService fileService;
@@ -55,12 +62,14 @@ public class PostController {
 		return new ResponseEntity<PostDto>(createdPost, HttpStatus.CREATED);
 	}
 	
-	//get  all posts by user
-	@GetMapping("/user/{userId}/posts")
+	//get  all posts by the logged in user
+	@GetMapping("/user/posts")
 	public ResponseEntity<UserPostResponse> getPostsByUser(
 			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
-			@RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE, required = false ) Integer pageSize,@PathVariable Integer userId){
-		UserPostResponse userPostResponse = this.postService.getPostbyUser(pageNumber, pageSize, userId);
+			@RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE, required = false ) Integer pageSize,
+			@RequestHeader(name = org.springframework.http.HttpHeaders.AUTHORIZATION) String token){
+		String email = this.jwtTokenHelper.getUsernameFromToken(token.substring(7));
+		UserPostResponse userPostResponse = this.postService.getPostbyUser(pageNumber, pageSize, email);
 		return new ResponseEntity<UserPostResponse>(userPostResponse, HttpStatus.OK);
 	}
 	

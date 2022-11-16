@@ -18,6 +18,8 @@ public interface PostRepo extends JpaRepository<Post, Integer> {
 //	
 	public Page<Post> findAllByUser(User user, Pageable pageable);
 	
+//	public Post findByEmail(String email);
+	
 	public List<Post> findByTitleContaining(String title);
 	
 
