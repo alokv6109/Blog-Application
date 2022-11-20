@@ -28,7 +28,7 @@ public class PostDto {
 	
 	private CategoryDto category;
 	
-	private UserDto user;
+	private UserDto user; //user that created the post
 	
 	private Set<CommentDto> comments = new HashSet<CommentDto>(); 
 	

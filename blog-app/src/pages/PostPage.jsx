@@ -20,8 +20,10 @@ export default function PostPage() {
     })  
     const [user, setUser] = useState(undefined) 
     useEffect(() => {
+      
       //set current user details
       setUser(getCurrentUserDetail)
+
       //load the post from the postId
       loadPost(postId).then((data)=>{
         // console.log(data);

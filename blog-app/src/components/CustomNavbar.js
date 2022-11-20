@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useContext} from 'react';
 import {NavLink as ReactLink} from 'react-router-dom'
 import {isLoggedIn, getCurrentUserDetail} from '../auth/index'
 import {
@@ -17,10 +17,13 @@ import {
   } from 'reactstrap';
 import { doLogout } from '../auth';
 import {useNavigate} from 'react-router-dom'
+import userContext from '../context/userContext';
 
 
 const CustomNavbar = ()=>{
   let navigate = useNavigate();
+
+  const userContextData = useContext(userContext)
     
     const [isOpen, setIsOpen] = useState(false)
 
@@ -41,6 +44,10 @@ const CustomNavbar = ()=>{
       doLogout(()=>{
         //logge pout and then called the callback function ie once the task is done do someother task
         setLogin(false)
+        userContextData.setUser({
+          data:null,
+          login:false
+        })
         navigate("/")
       })
     }

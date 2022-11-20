@@ -24,11 +24,14 @@ public interface PostService {
 	
 	PostDto getPostById(Integer postId);
 	
+	
+	
 	//all te post by a category
 	List<PostDto> getPostByCategory(Integer categoryId);
 	
 	//all the post by a user
-	UserPostResponse getPostbyUser(Integer pageNumber, Integer pageSize, String email);
+	UserPostResponse getPostbyUser(Integer pageNumber, Integer pageSize, String email); //with pagination implkemented
+	List<PostDto> getPostByUser(String email); //w/o paginaiton impleented
 	//search post
 	List<PostDto> searchPost(String keyword);
 

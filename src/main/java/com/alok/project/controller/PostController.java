@@ -62,7 +62,7 @@ public class PostController {
 		return new ResponseEntity<PostDto>(createdPost, HttpStatus.CREATED);
 	}
 	
-	//get  all posts by the logged in user
+	//get  all posts by the logged in user with pagination etc implkemented : anyday this is better
 	@GetMapping("/user/posts")
 	public ResponseEntity<UserPostResponse> getPostsByUser(
 			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
@@ -72,6 +72,17 @@ public class PostController {
 		UserPostResponse userPostResponse = this.postService.getPostbyUser(pageNumber, pageSize, email);
 		return new ResponseEntity<UserPostResponse>(userPostResponse, HttpStatus.OK);
 	}
+	
+	//get all post by the logged in user w/o pagination implemneted
+	@GetMapping("/users/posts")
+	public ResponseEntity<List<PostDto>> getPostByUser(
+			@RequestHeader(name = org.springframework.http.HttpHeaders.AUTHORIZATION) String token){
+		String email = this.jwtTokenHelper.getUsernameFromToken(token.substring(7));
+		List<PostDto> posts = this.postService.getPostByUser(email);
+		return new ResponseEntity<List<PostDto>>(posts, HttpStatus.OK);
+		
+	}
+	
 	
 	//get all posts by category
 	@GetMapping("/category/{categoryId}/posts")
@@ -118,6 +129,8 @@ public class PostController {
 		return new ResponseEntity<List<PostDto>>(result, HttpStatus.OK);
 	}
 	
+	
+	
 	//upload image API
 	@PostMapping("/posts/image/upload/{postId}")
 	public ResponseEntity<ImageResponse> uploadPostImage(
@@ -126,7 +139,7 @@ public class PostController {
 		
 		PostDto post =  this.postService.getPostById(postId);
 		
-		String fileName = this.fileService.uploadImage(path, image); //path is taken rom the appliation props file and then you k ow where to upload the image and image file will be given by you explicitly
+		String fileName = this.fileService.uploadImage(path, image); //path is taken rom the appliation props file and then you know where to upload the image and image file will be given by you explicitly
 		//above is giving us the name of the file that  has been uploaded to the images folder in the project
 		
 		post.setImageName(fileName);
@@ -138,6 +151,8 @@ public class PostController {
 		imgResponse.setMessage("The image has been uploaded successfully!");
 		return new ResponseEntity<ImageResponse>(imgResponse, HttpStatus.OK);
 	}
+	
+	
 	
 	//download from the server image file
 	@GetMapping(value=  "/posts/image/{imageName}", produces = org.springframework.http.MediaType.IMAGE_JPEG_VALUE)

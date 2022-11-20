@@ -17,6 +17,7 @@ import com.alok.project.entities.Category;
 import com.alok.project.entities.Post;
 import com.alok.project.entities.User;
 import com.alok.project.exceptions.ResourceNotFoundException;
+import com.alok.project.payloads.CategoryDto;
 //import com.alok.project.payloads.PageResponse;
 import com.alok.project.payloads.PostDto;
 import com.alok.project.payloads.PostResponse;
@@ -67,6 +68,9 @@ public class PostServiceImpl implements PostService {
 	public PostDto updatePost(PostDto postDto, Integer postId) {
 		Post post = this.postRepo.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Post", "post Id", postId));
 		
+		Category cat = this.categoryrepo.findById(postDto.getCategory().getCategoryId()).orElseThrow(()-> new ResourceNotFoundException("Category", "category Id", postDto.getCategory().getCategoryId()));
+		
+		post.setCategory(cat);
 		post.setTitle(postDto.getTitle());
 		post.setContent(postDto.getContent());
 		post.setImageName(postDto.getImageName());
@@ -181,6 +185,21 @@ public class PostServiceImpl implements PostService {
 		for(Post p:posts) {
 			postDtos.add(this.modelmapper.map(p, PostDto.class));
 		}
+		return postDtos;
+	}
+
+
+	//service for getPosy of the logged in user using the auth token w/o agination implemented
+	@Override
+	public List<PostDto> getPostByUser(String email) {
+		// TODO Auto-generated method stub
+		User user = this.userRepo.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("User", "email : " + email, 0));
+		List<Post> posts = this.postRepo.findByUser(user);
+		List<PostDto> postDtos = new ArrayList<PostDto>();
+		for(Post p:posts) {
+			postDtos.add(this.modelmapper.map(p, PostDto.class));
+		}
+		
 		return postDtos;
 	}
 
