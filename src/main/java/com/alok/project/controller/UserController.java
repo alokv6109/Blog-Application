@@ -50,8 +50,9 @@ public class UserController {
 	}
 	
 	@GetMapping("/{userId}")
-	public ResponseEntity<UserDto> getSingleUser(@RequestHeader Integer userId){
-		return ResponseEntity.ok(this.userService.getUserById(userId));
+	public ResponseEntity<UserDto> getSingleUser(@PathVariable Integer userId ){
+		UserDto userDto = this.userService.getUserById(userId);
+		return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
 	}
 	
 	

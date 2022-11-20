@@ -12,3 +12,9 @@ export const signIn  =(loginDetail)=>{
     return myAxios.post('/api/auth/login', loginDetail)
     .then((response)=>response.data)
 }
+
+
+//for getting the user info 
+export const getUser= (userId)=>{
+    return myAxios.get(`/api/users/${userId}`).then(response=>response.data)
+}
