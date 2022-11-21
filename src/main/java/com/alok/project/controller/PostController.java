@@ -83,13 +83,25 @@ public class PostController {
 		
 	}
 	
-	
-	//get all posts by category
 	@GetMapping("/category/{categoryId}/posts")
-	public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable Integer categoryId){
+	public ResponseEntity<List<PostDto>> getPostByCategory(@PathVariable Integer categoryId){
 		List<PostDto> posts = this.postService.getPostByCategory(categoryId);
 		return new ResponseEntity<List<PostDto>>(posts, HttpStatus.OK);
 	}
+	
+	
+	
+	
+	//get all posts by category  ------ //was done using pagination for the infinite scroll to happen
+//	@GetMapping("/category/{categoryId}/posts")
+//	public ResponseEntity<PostResponse> getPostsByCategory(
+//			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+//			@RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE, required = false ) Integer pageSize,
+//			@PathVariable Integer categoryId,
+//			@RequestParam(value = "sortBy",defaultValue = AppConstants.SORT_BY, required = false ) String sortBy){
+//		PostResponse posts = this.postService.getPostbyCategory(pageNumber, pageSize, categoryId, sortBy);
+//		return new ResponseEntity<PostResponse>(posts, HttpStatus.OK);
+//	}
 	
 	//get all the posts
 	//with paging and  sorting impemented

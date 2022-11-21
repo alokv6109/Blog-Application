@@ -148,6 +148,35 @@ public class PostServiceImpl implements PostService {
 		}
 		return postDtos;
 	}
+	
+	
+	@Override
+	public PostResponse getPostbyCategory(Integer pageNumber, Integer pageSize, Integer categoryId, String sortBy) {
+		// TODO Auto-generated method stub
+		Category category = this.categoryrepo.findById(categoryId).orElseThrow(()-> new ResourceNotFoundException("Category", "Category id", categoryId));
+		Pageable prequest = PageRequest.of(pageNumber, pageSize, org.springframework.data.domain.Sort.by(sortBy).descending());
+		Page<Post> page = this.postRepo.findAllByCategory(category, prequest);
+		List<Post> posts  = page.getContent();
+		
+		List<PostDto> postDtos  =new ArrayList<PostDto>();
+		for(Post p:posts) {
+			postDtos.add(this.modelmapper.map(p, PostDto.class));
+		}
+		
+		PostResponse postResponse = new PostResponse();
+		postResponse.setContent(postDtos);
+		postResponse.setPageNumber(page.getNumber());
+		postResponse.setPagesize(page.getSize());
+		postResponse.setTotalPages(page.getTotalPages());
+		postResponse.setTotalElements(page.getTotalElements());
+		postResponse.setLastpage(page.isLast());
+		System.out.println("the page number request was made " + new Date());
+		return postResponse;
+		
+	}
+	
+	
+	
 
 	//implkemet pagination over here as well with post by user
 	@Override
@@ -189,7 +218,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 
-	//service for getPosy of the logged in user using the auth token w/o agination implemented
+	//service for getPost of the logged in user using the auth token w/o agination implemented
 	@Override
 	public List<PostDto> getPostByUser(String email) {
 		// TODO Auto-generated method stub
@@ -202,6 +231,10 @@ public class PostServiceImpl implements PostService {
 		
 		return postDtos;
 	}
+
+
+
+	
 
 
 

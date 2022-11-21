@@ -9,6 +9,7 @@ import {toast } from 'react-toastify'
 import Post from '../components/Post';
 import { loadPostFromCategory } from '../services/post-service';
 import { deletePostBypostId } from '../services/post-service';
+import CategoryWiseFeed from '../components/CategoryWiseFeed';
 
 
 function Categories() {
@@ -32,6 +33,31 @@ function Categories() {
     
       
     }, [categoryId])
+
+    // useEffect(() => {
+    // //   getCategoryId()
+    // const getCategoryId= ()=>{
+    //     return categoryId
+    // }
+    
+      
+    // }, [categoryId])
+
+    // useEffect(() => {
+    //  console.log(categoryId);
+    //     callFeed(categoryId)
+    // }, [categoryId])
+    
+   
+
+    // const callFeed=(categoryId)=>{
+    //     return (
+    //         <CategoryWiseFeed categoryId={categoryId}/>
+    //     )
+        
+
+    // }
+    
 
      //functionality to deletePost
   function deletePost(post){
@@ -58,6 +84,11 @@ function Categories() {
                 </Col>
 
                 <Col md={10}>
+                    {/* {
+                        <h1>category id is : {categoryId}</h1>
+                    }
+                <CategoryWiseFeed categoryId={categoryId}/> */}
+                    
                     <h1>Blog Count: {posts.length}</h1>
                     {
                         posts && posts.map((post, index)=>{

@@ -40,13 +40,19 @@ export const uploadPostImage=(image, postId)=>{
     .then((response)=>response.data)
 }
 
+//function for loading post with category pagination not implemented 
 export const loadPostFromCategory =(categoryId)=>{
     return myAxios.get(`/api/category/${categoryId}/posts`).then(response=>{
-        // console.log("data from server");
-        // console.log(response.data);
+        
         return response.data;
     })
 }
+
+//for the pagination impolemented
+// export const loadPostFromCategory= (pageNumber, pageSize, categoryId)=>{
+//     return myAxios.get(`/api/category/${categoryId}/posts?pageNumber=${pageNumber}&pageSize=${pageSize}`).then(response=>response.data)
+// }
+
 
 //post by the user email with pagination implemented
 // export const loadPostFromUserId = (pageNumber, pageSize, token)=>{

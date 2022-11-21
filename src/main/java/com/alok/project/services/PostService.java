@@ -29,6 +29,8 @@ public interface PostService {
 	//all te post by a category
 	List<PostDto> getPostByCategory(Integer categoryId);
 	
+	PostResponse getPostbyCategory(Integer pageNumber, Integer pageSize, Integer categoryId, String sortBy);
+	
 	//all the post by a user
 	UserPostResponse getPostbyUser(Integer pageNumber, Integer pageSize, String email); //with pagination implkemented
 	List<PostDto> getPostByUser(String email); //w/o paginaiton impleented

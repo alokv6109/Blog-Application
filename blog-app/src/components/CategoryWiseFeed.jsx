@@ -1,25 +1,21 @@
 import React from 'react'
 import {useEffect, useState} from 'react'
-import { loadAllPost } from '../services/post-service'
 import {Row, Col, Pagination, PaginationItem, PaginationLink, Container} from 'reactstrap'
 import Post from './Post'
 import {toast } from 'react-toastify'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { deletePostBypostId } from '../services/post-service'
+import { loadPostFromCategory } from '../services/post-service'
 
-const NewFeed=()=>{
 
+function CategoryWiseFeed({categoryId}) {
     const [postContent, setPostContent] = useState({content:[], totalPages:'', totalElements:'', pageSize:'', lastpage:false, pageNumber:'' })
-    const [currentPage, setCurrentPage] = useState(0)  
-    useEffect(() => {
-        //load all the posts from the server
-        changePage(currentPage)
-        
+    const [currentPage, setCurrentPage] = useState(0)
     
-      
-    }, [currentPage])   //whenever the current page vale changes then use Effect will be called
-
-
+    useEffect(() => {
+      changePage(currentPage)
+    
+    }, [currentPage])
 
     const changePage =(pageNumber=0, pageSize=5)=>{
         if(pageNumber >postContent.pageNumber && postContent.lastpage){
@@ -29,7 +25,7 @@ const NewFeed=()=>{
             return;
         }
         
-        loadAllPost(pageNumber, pageSize).then(data=>{
+        loadPostFromCategory(pageNumber, pageSize, categoryId).then(data=>{
             setPostContent({
                 content:[...postContent.content, ...data.content],
                 totalPages:data.totalPages,
@@ -45,13 +41,15 @@ const NewFeed=()=>{
             toast.error("Error occured in loading the Post")
         })
     }
+    
+
 
     const changePageInfinite=()=>{
         console.log("page is changed");
         setCurrentPage(currentPage+1)
     }
 
-    //functionality to deletePost
+      //functionality to deletePost
   function deletePost(post){
     deletePostBypostId(post.postId).then(data=>{
       console.log(data);
@@ -62,9 +60,8 @@ const NewFeed=()=>{
       console.log(error);
     })
   }
-  
-    
-    
+
+
 
 
   return (
@@ -88,54 +85,23 @@ const NewFeed=()=>{
                     ))
                 }
                 </InfiniteScroll>
-                
-                
 
 
-                {/* //code base for the single single paginated post */}
-                 {/* <Container className ='mt-3'>
-                <Pagination  size='lg'>
-                    <PaginationItem onClick={()=>changePage(postContent.pageNumber-1)} disabled={postContent.pageNumber==0}>
-                        <PaginationLink> Previous</PaginationLink> 
-                    </PaginationItem>
-                    {/* </Pagination> */}
-                    
-                    {/* {
-                        [...Array(postContent.totalPages)].map((item, index)=>(
-                        //  <Pagination>
-                        <PaginationItem onClick={()=>changePage(index)} active ={index==postContent.pageNumber} key={index}>
-                            <PaginationLink >
-                                {index+1}
-                            </PaginationLink>
-                        </PaginationItem>
-                        
-                            ))
-                    }
-
-                    
-                    {/* <Pagination> */}
-                        {/* <PaginationItem onClick ={()=>changePage(postContent.pageNumber+1)} disabled={postContent.lastpage}>
-                        <PaginationLink>
-                            Next</PaginationLink>
-                        </PaginationItem> */}
-                    {/* <PaginationItem> */}
-                 {/* </Pagination> */}
-
-
-                {/* </Container >  */}
-                  
-*
-
-
-                
-
-            
-            </Col>
-        </Row>
+    {/* <div>CategoryWiseFeed will displayed for the category id : {categoryId}
+        <h1>Blog Count: {posts.length}</h1>
+                    {
+                        posts && posts.map((post, index)=>{
+                            return(
+                                <Post key={index} post={post} deletePost={deletePost}/>
+                            )
+                        })
+                    } */}
+                    </Col>
+                    </Row>
+    
+    
     </div>
   )
 }
 
-
-export default NewFeed;
-
+export default CategoryWiseFeed
